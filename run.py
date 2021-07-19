@@ -91,7 +91,7 @@ class applicationDB:
 
 
     def putStatus(self, saksnummer, status):
-        #Insert check for status format
+        #Insert check for status == ? ?
 
         applicationId = self.getId(saksnummer)
         
@@ -103,6 +103,18 @@ class applicationDB:
         response = self.container.upsert_item(body=read_item)
 
         return read_item['status']
+    
+    def addChild(self, saksnummer, newChild):
+        applicationId = self.getId(saksnummer)
+        
+        saksnummer = int(saksnummer)
+
+        read_item = self.container.read_item(item=applicationId, partition_key=saksnummer)
+        read_item["opplysninger_om_barn_barnehage"].append(newChild)
+
+        response = self.container.upsert_item(body=read_item)
+
+        return self.getApplication(saksnummer)
 
     def updateApplication(self, saksnummer, newApplication):
         applicationId = self.getId(saksnummer)

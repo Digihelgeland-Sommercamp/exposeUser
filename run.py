@@ -123,7 +123,15 @@ class applicationDB:
         return self.getApplication(saksnummer)
 
     def removeApplication(self, saksnummer):
-        applicationId = 
+        applicationId = self.getId(saksnummer)
+        print("appId:",applicationId)
+        print("saksnr:", saksnummer)
+
+        del_item = self.getApplication(saksnummer)
+        response = self.container.delete_item(item=applicationId, partition_key=saksnummer)
+
+        return del_item
+
 
 
 
@@ -218,7 +226,8 @@ def run_sample():
         }
 
         test.updateApplication(23482974, ny_soeknad)
-        test.submitApplication(newApplication)
+        #test.submitApplication(newApplication)
+        #test.removeApplication(23482976)
 
     except exceptions.CosmosHttpResponseError as e:
         print('\nrun_sample has caught an error. {0}'.format(e.message))

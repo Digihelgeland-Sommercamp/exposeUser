@@ -67,5 +67,26 @@ def updateApplication(saksnummer):
     except:
         return "<p>404</p>"
 
+@app.route("/applications/submit_application", methods=['POST'])
+def submitApplication():
+    try:
+        request_data = request.get_json()
+
+        if request_data != None:
+            try:
+                print("inne i try")
+                application = applicationDB()
+                sub_application = application.submitApplication(request_data)
+                print("ferdig med sub")
+                status_code = 200
+                return request_data
+
+            except KeyError:
+                response = "Faulty JSON. Please provide JSON in request body"
+                status_code = 400
+
+    except:
+        return "<p>404</p>"
+
 if __name__=="__main__":
     app.run(debug=True)

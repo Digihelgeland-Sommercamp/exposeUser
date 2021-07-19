@@ -68,7 +68,7 @@ class applicationDB:
         return applicationId
 
     def readApplication(self, saksnummer):
-        applicationId = self.getId(container, saksnummer)
+        applicationId = self.getId(self.container, saksnummer)
 
         response = self.container.read_item(item=applicationId, partition_key=saksnummer)
 
@@ -120,12 +120,14 @@ class applicationDB:
         return self.getApplication(saksnummer)
 
     def submitApplication(self, newApplication):
+        #Insert check for newApplication in right format
         
         #Create a new Application object. This object has nested properties and various types including numbers, DateTimes and strings.
         # This can be saved as JSON as is without converting into rows/columns.
-        self.container(create_item(body=newApplication))
-
-        return newApplication
+        self.container.create_item(body=newApplication)
+        saksnummer = int(newApplication.get("saksnummer"))
+        
+        return self.getApplication(saksnummer)
 
 
 
@@ -134,9 +136,9 @@ class applicationDB:
 def run_sample():
     try:
         test = applicationDB()
-        test.readApplication(test.container, 23482973)
+        test.readApplication(23482973)
         test.putStatus(23482973, 'ikke_godkjent')
-        test.readApplication(test.container, 23482973)
+        test.readApplication(23482973)
         ny_soeknad = {
             "saksnummer": 23482974,
             "status": "ikke_godkjent",
@@ -179,8 +181,50 @@ def run_sample():
             "_ts": 1625819344
         }
 
-        test.update_application(23482974, ny_soeknad)
+        newApplication = {
+            "saksnummer": 23482976,
+            "status": "ikke_godkjent",
+            "status_historikk": [
+                {
+                    "seq": 0,
+                    "date": "12:36-07-07-2021",
+                    "status": "til_behandling"
+                },
+                {
+                    "seq": 1,
+                    "date": "12:37-07-07-2021",
+                    "status": "godkjent"
+                }
+            ],
+            "eier": [
+                {
+                    "fodselsnummer": 12345678908,
+                    "sivilstand_ved_innsending": "partner"
+                }
+            ],
+            "opplysninger_om_barn_barnehage": [
+                {
+                    "barnets_navn": "A was here",
+                    "fodselsnummer": 17382943827,
+                    "navn_pa_barnehage": "Barnehage City",
+                    "prosent_plass": 50
+                }
+            ],
+            "saksbehandler": [
+                {
+                    "brukernavn": "ed1th"
+                }
+            ],
+            "id": "c4be20f1-e127-4b8d-903e-c9f1cff1b73a",
+            "_rid": "s5FjAMdG60ABAAAAAAAAAA==",
+            "_self": "dbs/s5FjAA==/colls/s5FjAMdG60A=/docs/s5FjAMdG60ABAAAAAAAAAA==/",
+            "_etag": "\"0100c005-0000-3c00-0000-60f54dc70000\"",
+            "_attachments": "attachments/",
+            "_ts": 1626688967
+        }
 
+        test.updateApplication(23482974, ny_soeknad)
+        test.submitApplication(newApplication)
 
     except exceptions.CosmosHttpResponseError as e:
         print('\nrun_sample has caught an error. {0}'.format(e.message))

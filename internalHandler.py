@@ -35,10 +35,10 @@ def updateStatus(saksnummer):
                 IDkey = int(saksnummer)
                 application = applicationDB()
                 print(type(request_data))
-                application.putStatus(IDkey, request_data)
+                application.updateStatus(IDkey, request_data)
                 status_code = 200
 
-                return {"status" : request_data}
+                return application.getApplication(IDkey)
 
             except KeyError:
                 response = "Faulty input. Please provide String in request body"
@@ -78,7 +78,7 @@ def updateApplication(saksnummer):
                 upd_application = application.updateApplication(IDkey, request_data)
 
                 status_code = 200
-                return request_data
+                return application.getApplication(IDkey)
 
             except KeyError:
                 response = "Faulty JSON. Please provide JSON in request body"

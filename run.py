@@ -2,9 +2,11 @@ import azure.cosmos.documents as documents
 import azure.cosmos.cosmos_client as cosmos_client
 import azure.cosmos.exceptions as exceptions
 from azure.cosmos.partition_key import PartitionKey
-import datetime
+from datetime import datetime
 
 import config
+
+import time
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequistes -
@@ -90,7 +92,7 @@ class applicationDB:
             return None
 
 
-    def putStatus(self, saksnummer, status):
+    def updateStatus(self, saksnummer, status):
         #Insert check for status == ? ?
 
         applicationId = self.getId(saksnummer)
@@ -99,6 +101,16 @@ class applicationDB:
 
         read_item = self.container.read_item(item=applicationId, partition_key=saksnummer)
         read_item['status'] = status
+
+
+        #Update status_historikk
+        if len(read_item['status_historikk']) > 0:
+            newStatusHistorikk = {
+                "seq" : read_item['status_historikk'][-1].get("seq") + 1,
+                "date" : str(datetime.now()),
+                "status" : status
+            }
+            read_item['status_historikk'].append(newStatusHistorikk)
 
         response = self.container.upsert_item(body=read_item)
 
@@ -151,7 +163,7 @@ def run_sample():
     try:
         test = applicationDB()
         test.readApplication(23482973)
-        test.putStatus(23482973, 'ikke_godkjent')
+        test.updateStatus(23482973, 'ikke_godkjent')
         test.readApplication(23482973)
         ny_soeknad = {
             "saksnummer": 23482974,

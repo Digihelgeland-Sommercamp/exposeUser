@@ -44,10 +44,8 @@ class applicationDB:
             self.container = self.db.get_container_client(CONTAINER_ID)
             print('Container with id \'{0}\' was found'.format(CONTAINER_ID))
 
-    def getId(self, container, saksnummer):
-        print('\nFinner ID til søknad med saksnummer {0}\n'.format(saksnummer))
-
-        application = list(container.query_items(
+    def getId(self, saksnummer):
+        application = list(self.container.query_items(
             query="SELECT * FROM r WHERE r.saksnummer=@saksnummer",
             parameters=[
                 { "name":"@saksnummer", "value": saksnummer }
@@ -58,17 +56,12 @@ class applicationDB:
         else:
             return None
 
-        print("Query successful")
-        print(application[0]["id"])
-
         applicationId = application[0]["id"]
-
-        print("Søknad med saksnummer {0} har id {1}".format(saksnummer, applicationId))
 
         return applicationId
 
     def readApplication(self, saksnummer):
-        applicationId = self.getId(self.container, saksnummer)
+        applicationId = self.getId(saksnummer)
 
         response = self.container.read_item(item=applicationId, partition_key=saksnummer)
 
@@ -100,7 +93,7 @@ class applicationDB:
     def putStatus(self, saksnummer, status):
         #Insert check for status format
 
-        applicationId = self.getId(self.container, saksnummer)
+        applicationId = self.getId(saksnummer)
         
         saksnummer = int(saksnummer)
 
@@ -112,7 +105,7 @@ class applicationDB:
         return read_item['status']
 
     def updateApplication(self, saksnummer, newApplication):
-        applicationId = self.getId(self.container, saksnummer)
+        applicationId = self.getId(saksnummer)
         
         read_item = self.container.read_item(item=applicationId, partition_key=saksnummer)
         response = self.container.replace_item(item=read_item, body=newApplication)
@@ -129,7 +122,8 @@ class applicationDB:
         
         return self.getApplication(saksnummer)
 
-
+    def removeApplication(self, saksnummer):
+        applicationId = 
 
 
 

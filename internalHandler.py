@@ -46,6 +46,26 @@ def updateStatus(saksnummer):
     except:
         return "<p>404</p>"
 
+@app.route("/applications/<saksnummer>/add_child", methods=['POST'])
+def addChild(saksnummer):
+    try:
+        request_data = request.get_json()
+        if request_data != None:
+            try:
+                IDkey = int(saksnummer)
+                application = applicationDB()
+                application.addChild(IDkey, request_data)
+                status_code = 200
+
+                return application.getApplication(IDkey)
+
+            except KeyError:
+                response = "Faulty JSON. Please provide JSON in request body"
+                status_code = 400
+    except:
+        return "<p>404</p>"
+
+
 @app.route("/applications/<saksnummer>/update_application", methods=['POST'])
 def updateApplication(saksnummer):
     try:

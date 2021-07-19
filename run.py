@@ -237,9 +237,17 @@ def run_sample():
             "_ts": 1626688967
         }
 
+        newChild = {
+            "barnets_navn": "Jon",
+            "fodselsnummer": 28049712305,
+            "navn_pa_barnehage": "Barnehage City",
+            "prosent_plass": 100
+        }
+
         test.updateApplication(23482974, ny_soeknad)
         #test.submitApplication(newApplication)
         #test.removeApplication(23482976)
+        test.addChild(23482973, newChild)
 
     except exceptions.CosmosHttpResponseError as e:
         print('\nrun_sample has caught an error. {0}'.format(e.message))

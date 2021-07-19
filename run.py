@@ -67,10 +67,10 @@ class applicationDB:
 
         return applicationId
 
-    def readApplication(self, container, saksnummer):
+    def readApplication(self, saksnummer):
         applicationId = self.getId(container, saksnummer)
 
-        response = container.read_item(item=applicationId, partition_key=saksnummer)
+        response = self.container.read_item(item=applicationId, partition_key=saksnummer)
 
     def getApplication(self, saksnummer):
         application = list(self.container.query_items(
@@ -98,16 +98,13 @@ class applicationDB:
 
 
     def putStatus(self, saksnummer, status):
-        #Check if status == 'godkjent' or 'ikke_godkjent'
+        #Insert check for status format
 
         applicationId = self.getId(self.container, saksnummer)
         
-        #applicationId = "c4be20f1-e127-4b8d-903e-c9f1cff1b73a"
         saksnummer = int(saksnummer)
 
         read_item = self.container.read_item(item=applicationId, partition_key=saksnummer)
-
-
         read_item['status'] = status
 
         response = self.container.upsert_item(body=read_item)
@@ -118,10 +115,9 @@ class applicationDB:
         applicationId = self.getId(self.container, saksnummer)
         
         read_item = self.container.read_item(item=applicationId, partition_key=saksnummer)
-
         response = self.container.replace_item(item=read_item, body=newApplication)
 
-        return saksnummer
+        return self.getApplication(saksnummer)
 
 
 

@@ -119,6 +119,16 @@ class applicationDB:
 
         return self.getApplication(saksnummer)
 
+    def submitApplication(self, newApplication):
+        
+        #Create a new Application object. This object has nested properties and various types including numbers, DateTimes and strings.
+        # This can be saved as JSON as is without converting into rows/columns.
+        self.container(create_item(body=newApplication))
+
+        return newApplication
+
+
+
 
 
 def run_sample():

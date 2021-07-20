@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exposeuserservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exposeuserservice
+  template:
+    metadata:
+      labels:
+        app: exposeuserservice
+    spec:
+      containers:
+      - name: exposeuserservice
+        image: johannesdigdir/exposeuser_service:b3e254e918a49774670150511fa34a6af22efce5
+        ports:
+        - containerPort: 5000

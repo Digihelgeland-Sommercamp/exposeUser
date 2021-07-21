@@ -6,6 +6,7 @@ from datetime import datetime
 from werkzeug.exceptions import BadRequest
 import json
 import random
+import secrets
 
 import config
 
@@ -157,6 +158,7 @@ class applicationDB:
                 break
             saksnummer = self.createRandomCaseNumber()
         newApplication["saksnummer"] = int(saksnummer)
+        newApplication["id"] = secrets.token_urlsafe()
         self.container.create_item(body=newApplication)
         return str(saksnummer)
 

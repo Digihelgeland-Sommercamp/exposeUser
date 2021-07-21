@@ -104,6 +104,16 @@ def submitApplication():
             response = "Faulty JSON. Please provide JSON in request body"
             status_code = 400
 
+@app.route("/applications/<saksnummer>/remove_application", methods=['DELETE'])
+def removeApplication(saksnummer):
+    #try:
+    IDkey = int(saksnummer)
+    application = applicationDB()
+    del_item = application.removeApplication(IDkey)
+    return del_item
+    #except:
+    #    return "<p>404</p>"
+
 if __name__=="__main__":
     from waitress import serve
     serve(app, host='0.0.0.0', port=5000)

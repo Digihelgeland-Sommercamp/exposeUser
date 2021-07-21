@@ -35,12 +35,9 @@ def updateStatus(saksnummer):
             try:
                 IDkey = int(saksnummer)
                 application = applicationDB()
-                print(type(request_data))
                 application.updateStatus(IDkey, request_data)
                 status_code = 200
-
                 return application.getApplication(IDkey)
-
             except KeyError:
                 response = "Faulty input. Please provide String in request body"
                 status_code = 400 

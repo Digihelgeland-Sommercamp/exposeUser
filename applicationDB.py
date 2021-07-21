@@ -154,8 +154,6 @@ class applicationDB:
 
     def removeApplication(self, saksnummer):
         applicationId = self.getId(saksnummer)
-        print("appId:",applicationId)
-        print("saksnr:", saksnummer)
 
         del_item = self.getApplication(saksnummer)
         response = self.container.delete_item(item=applicationId, partition_key=saksnummer)

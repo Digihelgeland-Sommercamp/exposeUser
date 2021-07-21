@@ -102,13 +102,21 @@ class applicationDB:
         read_item = self.container.read_item(item=applicationId, partition_key=saksnummer)
         read_item['status'] = status
 
-
         #Update status_historikk
+        if "status_historikk" not in read_item.keys():
+            read_item['status_historikk'] = []
         if len(read_item['status_historikk']) > 0:
             newStatusHistorikk = {
                 "seq" : read_item['status_historikk'][-1].get("seq") + 1,
                 "date" : str(datetime.now()),
                 "status" : status
+            }
+            read_item['status_historikk'].append(newStatusHistorikk)
+        else:
+            newStatusHistorikk = {
+                "seq": 0,
+                "date": str(datetime.now()),
+                "status": status
             }
             read_item['status_historikk'].append(newStatusHistorikk)
 

@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: exposeuserservice
-        image: johannesdigdir/exposeuser_service:ef41f6206e3a8adffcd1eb7e605c6a96d2e1f291
+        image: johannesdigdir/exposeuser_service:46d142f88939c9303580ff3a9d641183d309c469
         ports:
         - containerPort: 5000

@@ -93,13 +93,10 @@ def submitApplication():
     request_data = json.loads(request.get_json())
     if request_data != None:
         try:
-            print("inne i try")
             application = applicationDB()
             res = application.submitApplication(request_data)
-            print("ferdig med sub")
             status_code = 200
             return res
-
         except KeyError:
             response = "Faulty JSON. Please provide JSON in request body"
             status_code = 400

@@ -93,7 +93,7 @@ class applicationDB:
 
 
     def updateStatus(self, saksnummer, status):
-        #Insert check for status == ? ?
+        #TODO: Insert check for status
 
         applicationId = self.getId(saksnummer)
         
@@ -150,7 +150,7 @@ class applicationDB:
             saksnummer = self.createRandomCaseNumber()
         newApplication["saksnummer"] = int(saksnummer)
         self.container.create_item(body=newApplication)
-        return self.getApplication(saksnummer)
+        return str(saksnummer)
 
     def removeApplication(self, saksnummer):
         applicationId = self.getId(saksnummer)

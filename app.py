@@ -30,7 +30,7 @@ def getStatus(saksnummer):
 @app.route("/applications/<saksnummer>/update_status", methods=['POST'])
 def updateStatus(saksnummer):
     try:
-        request_data = request.get_json(force=True)
+        request_data = request.data.decode()
         if request_data != None:
             try:
                 IDkey = int(saksnummer)
@@ -43,13 +43,7 @@ def updateStatus(saksnummer):
 
             except KeyError:
                 response = "Faulty input. Please provide String in request body"
-                status_code = 400
-                return Response(response, status_code)
-
-        response = "get_json returns None"
-        status_code = 400
-        return Response(response, status_code)
-
+                status_code = 400 
     except:
         return "<p>404</p>"
 

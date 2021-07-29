@@ -1,6 +1,6 @@
 Flask>=2.0.1
 waitress>=2.0.0
-azure-core==1.1.1
+azure-core>=1.16.0
 azure-cosmos==4.1.0
 certifi==2019.11.28
 chardet==3.0.4

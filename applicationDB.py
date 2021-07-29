@@ -2,6 +2,7 @@ import azure.cosmos.documents as documents
 import azure.cosmos.cosmos_client as cosmos_client
 import azure.cosmos.exceptions as exceptions
 from azure.cosmos.partition_key import PartitionKey
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from datetime import datetime
 from werkzeug.exceptions import BadRequest
 import json
@@ -15,6 +16,8 @@ MASTER_KEY = config.settings['master_key']
 DATABASE_ID = config.settings['database_id']
 CONTAINER_ID = config.settings['container_id']
 CASE_NUMBER_CONTAINER_ID = config.settings['case_number_container_id']
+CONNECTION_STRING = config.settings['connection_string']
+VEDLEGG_CONTAINER_NAME = config.settings['vedlegg_container_name']
 
 class applicationDB:
     def __init__(self):
@@ -44,6 +47,11 @@ class applicationDB:
         except exceptions.CosmosResourceExistsError:
             self.case_number_container = self.db.get_container_client(CONTAINER_ID)
             print('Container with id \'{0}\' was found'.format(CASE_NUMBER_CONTAINER_ID))
+
+        self.blob_service_client = BlobServiceClient.from_connection_string(CONNECTION_STRING)
+        self.container_name = VEDLEGG_CONTAINER_NAME
+        self.vedlegg_container_client = self.blob_service_client.get_container_client(self.container_name)
+
 
     def getId(self, saksnummer):
         application = list(self.container.query_items(
@@ -177,6 +185,25 @@ class applicationDB:
         for i in range(9):
             number += str(random.randint(0, 9))
         return number
+
+    def uploadAttachment(self, data):
+        blob_keys = []
+        blob_formats = []
+        for i in data.keys():
+            name = secrets.token_urlsafe(32)
+            fileformat = data[i].content_type.split("/")[1]
+            blob_name = name + "." + fileformat
+            blob_keys.append(name)
+            blob_formats.append(fileformat)
+            try:
+                vedlegg_client = self.blob_service_client.get_blob_client(container=self.container_name, blob=blob_name)
+                vedlegg_client.upload_blob(data[i].stream.read())
+            except Exception as e:
+                return e
+        res = {}
+        for i in range(len(blob_keys)):
+            res[blob_keys[i]] = blob_formats[i]
+        return res
 
 
 def run_sample():

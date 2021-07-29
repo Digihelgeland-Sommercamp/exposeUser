@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 import json
 from applicationDB import *
 import waitress
@@ -97,6 +97,13 @@ def submitApplication():
         except KeyError:
             response = "Faulty JSON. Please provide JSON in request body"
             status_code = 400
+
+@app.route("/applications/upload_attachment", methods=['POST'])
+def uploadAttachment():
+    data = request.files
+    application = applicationDB()
+    res = application.uploadAttachment(data)
+    return jsonify(res)
 
 if __name__=="__main__":
     from waitress import serve

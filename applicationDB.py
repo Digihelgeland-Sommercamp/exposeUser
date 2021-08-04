@@ -101,7 +101,7 @@ class applicationDB:
             return format(e)
         if applications is None:
             applications=[]
-        return format(applications)        
+        return json.dumps(applications)
 
     def getStatus(self, saksnummer):
         application = list(self.container.query_items(

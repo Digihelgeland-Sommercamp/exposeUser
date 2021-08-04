@@ -1,3 +1,4 @@
+from typing_extensions import ParamSpec
 import azure.cosmos.documents as documents
 import azure.cosmos.cosmos_client as cosmos_client
 import azure.cosmos.exceptions as exceptions
@@ -87,6 +88,21 @@ class applicationDB:
             return format(application[0])
         else:
             raise BadRequest
+
+    def getAllApplications(self, personidentifikator):
+        try:
+            applications = list(self.container.query_items(
+                query="SELECT * FROM r WHERE r.identifikasjonsnummer.foedselsEllerDNummer=@personidentifikator",
+                enable_cross_partition_query=True,
+                parameters=[
+                    {"name": "@personidentifikator", "value": personidentifikator}
+                ]
+            ))
+        except Exception as e:
+            return format(e)
+        if applications is None:
+            applications=[]
+        return format(applications)        
 
     def getStatus(self, saksnummer):
         application = list(self.container.query_items(

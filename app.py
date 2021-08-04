@@ -18,6 +18,16 @@ def getApplication(saksnummer):
     except Exception as e:
         return e
 
+# Get all application on a single person
+@app.route("/all_applications/<personidentifikator>")
+def getAllApplications(personidentifikator):
+    try:
+        application = applicationDB()
+        return application.getAllApplications(personidentifikator)
+        
+    except Exception as e:
+        return e
+
 @app.route("/applications/<saksnummer>/status")
 def getStatus(saksnummer):
     try:

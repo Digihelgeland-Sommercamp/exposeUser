@@ -91,7 +91,7 @@ class applicationDB:
     def getAllApplications(self, personidentifikator):
         try:
             applications = list(self.container.query_items(
-                query="SELECT * FROM r WHERE r.identifikasjonsnummer.foedselsEllerDNummer=@personidentifikator",
+                query="SELECT r.saksnummer, r.status, r.dato_siste_endring FROM r WHERE r.identifikasjonsnummer.foedselsEllerDNummer=@personidentifikator",
                 enable_cross_partition_query=True,
                 parameters=[
                     {"name": "@personidentifikator", "value": personidentifikator}

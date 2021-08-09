@@ -148,25 +148,6 @@ class applicationDB:
 
         return read_item['status']
     
-    def addChild(self, saksnummer, newChild):
-        applicationId = self.getId(saksnummer)
-        
-        saksnummer = int(saksnummer)
-
-        read_item = self.container.read_item(item=applicationId, partition_key=saksnummer)
-        read_item["opplysninger_om_barn_barnehage"].append(newChild)
-
-        response = self.container.upsert_item(body=read_item)
-
-        return self.getApplication(saksnummer)
-
-    def updateApplication(self, saksnummer, newApplication):
-        applicationId = self.getId(saksnummer)
-        
-        read_item = self.container.read_item(item=applicationId, partition_key=saksnummer)
-        response = self.container.replace_item(item=read_item, body=newApplication)
-
-        return self.getApplication(saksnummer)
 
     def submitApplication(self, newApplication):
         saksnummer = self.createRandomCaseNumber()
@@ -318,10 +299,8 @@ def run_sample():
             "prosent_plass": 100
         }
 
-        test.updateApplication(23482974, ny_soeknad)
         test.submitApplication(newApplication)
         #test.removeApplication(23482976)
-        test.addChild(23482973, newChild)
 
     except exceptions.CosmosHttpResponseError as e:
         print('\nrun_sample has caught an error. {0}'.format(e.message))
@@ -334,4 +313,10 @@ if __name__ == '__main__':
     
     #run_sample()
     app = applicationDB()
-    
+    print("client ", type(app.client))
+    print("db ", type(app.db))
+    print("container ", type(app.container))
+    print("case_number_container ", type(app.case_number_container))
+    print("blob_service_client ", type(app.blob_service_client))
+    print("vedlegg_container_client ", type(app.vedlegg_container_client))
+

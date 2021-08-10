@@ -132,17 +132,19 @@ class applicationDB:
         if len(read_item['status_historikk']) > 0:
             newStatusHistorikk = {
                 "seq" : read_item['status_historikk'][-1].get("seq") + 1,
-                "date" : str(datetime.now()),
+                "date" : str(datetime.date.today().strftime("%d-%m-%Y")),
                 "status" : status
             }
             read_item['status_historikk'].append(newStatusHistorikk)
         else:
             newStatusHistorikk = {
                 "seq": 0,
-                "date": str(datetime.now()),
+                "date": str(datetime.date.today().strftime("%d-%m-%Y")),
                 "status": status
             }
             read_item['status_historikk'].append(newStatusHistorikk)
+        
+        read_item['dato_siste_endring'] = str(datetime.date.today().strftime("%d-%m-%Y"))
 
         response = self.container.upsert_item(body=read_item)
 

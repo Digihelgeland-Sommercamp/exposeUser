@@ -31,7 +31,7 @@ class applicationDB:
             self.db = self.client.get_database_client(DATABASE_ID)
             print('Database with id \'{0}\' was found'.format(DATABASE_ID))
 
-        # setup container for this sample
+        # setup container
         try:
             self.container = self.db.create_container(id=CONTAINER_ID, partition_key=PartitionKey(path='/partitionKey'))
             print('Container with id \'{0}\' created'.format(CONTAINER_ID))
@@ -117,8 +117,6 @@ class applicationDB:
 
 
     def updateStatus(self, saksnummer, status):
-        #TODO: Insert check for status
-
         applicationId = self.getId(saksnummer)
         
         saksnummer = int(saksnummer)
@@ -170,9 +168,6 @@ class applicationDB:
 
     def removeApplication(self, saksnummer):
         applicationId = self.getId(saksnummer)
-        print("appId:",applicationId)
-        print("saksnr:", saksnummer)
-
         del_item = self.getApplication(saksnummer)
         response = self.container.delete_item(item=applicationId, partition_key=saksnummer)
 
@@ -300,25 +295,10 @@ def run_sample():
             "navn_pa_barnehage": "Barnehage City",
             "prosent_plass": 100
         }
-
         test.submitApplication(newApplication)
-        #test.removeApplication(23482976)
 
     except exceptions.CosmosHttpResponseError as e:
         print('\nrun_sample has caught an error. {0}'.format(e.message))
 
     finally:
             print("\nrun_sample done")
-
-
-if __name__ == '__main__':
-    
-    #run_sample()
-    app = applicationDB()
-    print("client ", type(app.client))
-    print("db ", type(app.db))
-    print("container ", type(app.container))
-    print("case_number_container ", type(app.case_number_container))
-    print("blob_service_client ", type(app.blob_service_client))
-    print("vedlegg_container_client ", type(app.vedlegg_container_client))
-

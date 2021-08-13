@@ -161,6 +161,8 @@ class applicationDB:
             if len(application)==0:
                 break
             saksnummer = self.createRandomCaseNumber()
+
+        newApplication = newApplication
         newApplication["saksnummer"] = int(saksnummer)
         newApplication["id"] = secrets.token_urlsafe()
         self.container.create_item(body=newApplication)

@@ -1,5 +1,7 @@
 from flask import Flask, request, Response, jsonify
 import json
+
+from flask.wrappers import Request
 from applicationDB import *
 import waitress
 
@@ -97,7 +99,10 @@ def updateApplication(saksnummer):
 
 @app.route("/applications/submit_application", methods=['POST'])
 def submitApplication():
-    request_data = json.loads(request.get_json())
+    request_data = json.loads(request.data)
+    if(type(request_data) == str):
+        request_data = json.loads(request_data)
+
     if request_data != None:
         try:
             application = applicationDB()

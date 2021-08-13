@@ -10,10 +10,10 @@ It is coupled with the following microservices:
 Every route can be found in [app.py](https://github.com/Digihelgeland-Sommercamp/exposeUser/blob/main/app.py)   
 Each route below links to the OpenAPI specification on swaggerhub.
 
-* [GET] [/applications/<saksnummer>](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/get_applications__saksnummer_)
-* [GET] [/applications/<saksnummer>/status](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/get_applications__saksnummer__status)
-* [GET] [/all_applications/<personidentifikator>](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/get_all_applications__personidentifikator_)
-* [POST] [/applications/<saksnummer>/update_status](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/post_applications__saksnummer__update_status)
+* [GET] [/applications/\<saksnummer\>](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/get_applications__saksnummer_)
+* [GET] [/applications/\<saksnummer\>/status](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/get_applications__saksnummer__status)
+* [GET] [/all_applications/\<personidentifikator\>](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/get_all_applications__personidentifikator_)
+* [POST] [/applications/\<saksnummer\>/update_status](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/post_applications__saksnummer__update_status)
 * [POST] [/applications/submit_application](https://app.swaggerhub.com/apis/emilwhj/exposeUser/0.1#/default/post_applications_submit_application)
 
 ### Installation
